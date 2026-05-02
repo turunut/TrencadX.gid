@@ -363,7 +363,7 @@ proc TrencadX::CopyName { xpath } {
 #print data in the .dat calculation file (instead of a classic .bas template)
 proc TrencadX::WriteCalculationFile { filename } {
     
-    TrencadX::InitWriteFile $filename
+    TrencadX::InitWriteFile $filename    
     
     TrencadX::EndWriteFile ;
     
@@ -478,7 +478,7 @@ proc TrencadX::WriteSets { filename blockName } {
     
     set document [$::gid_groups_conds::doc documentElement]
     
-    TrencadX::WriteString "set_definition"
+    TrencadX::WriteString "mat_definition"
     
     set ID 1
     foreach gNode [$document selectNodes {//condition[@n=$address]/group}] {
@@ -500,7 +500,18 @@ proc TrencadX::WriteSets { filename blockName } {
 	incr ID 1
     }
     
-    TrencadX::WriteString "set_end"
+    TrencadX::WriteString "mat_end"
+    
+    TrencadX::WriteString "mod_definition"
+
+    # Loop over all elements
+    set all_elements [GiD_Info Mesh MaxNumElements]
+    set limit [expr {$all_elements + 1}]
+    foreach i [range 1 $limit] {
+	GiD_WriteCalculationFile puts "$i 1"
+    }
+    
+    TrencadX::WriteString "mod_end"
     
 }
 
