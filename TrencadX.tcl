@@ -539,7 +539,9 @@ proc TrencadX::WriteBoundaryEntities { filename blockName } {
 proc TrencadX::WriteBCs { filename } {
     
     set document [$::gid_groups_conds::doc documentElement]
-    
+
+    TrencadX::WriteString "for_models"
+    TrencadX::WriteString "begin_model"
 
     set address "dirichlet"
     
@@ -576,6 +578,9 @@ proc TrencadX::WriteBCs { filename } {
     
     TrencadX::WriteString "end_on_body"
     
+    TrencadX::WriteString "end_model"
+    TrencadX::WriteString "end_models"
+
 }
 
 proc TrencadX::WriteMaterials { filename } {
