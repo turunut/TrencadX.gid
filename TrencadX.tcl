@@ -436,7 +436,7 @@ proc TrencadX::WriteData { filename } {
 	GiD_WriteCalculationFile puts "model $model"
 	GiD_WriteCalculationFile puts ""
 
-	GiD_WriteCalculationFile puts "problem_definition"
+	GiD_WriteCalculationFile puts "begin_problem_definition"
 
     if { $kind eq "analysis" } {
 	set xpath {/TrencadX_customlib_data/container[@n='stagesAnly']/blockdata[@n='stage']}
@@ -478,7 +478,7 @@ proc TrencadX::WriteSets { filename blockName } {
     
     set document [$::gid_groups_conds::doc documentElement]
     
-    TrencadX::WriteString "mat_definition"
+    TrencadX::WriteString "mat_def"
     
     set ID 1
     foreach gNode [$document selectNodes {//condition[@n=$address]/group}] {
@@ -502,7 +502,7 @@ proc TrencadX::WriteSets { filename blockName } {
     
     TrencadX::WriteString "mat_end"
     
-    TrencadX::WriteString "mod_definition"
+    TrencadX::WriteString "mdl_def"
 
     # Loop over all elements
     set all_elements [GiD_Info Mesh MaxNumElements]
@@ -511,7 +511,7 @@ proc TrencadX::WriteSets { filename blockName } {
 	GiD_WriteCalculationFile puts "$i 1"
     }
     
-    TrencadX::WriteString "mod_end"
+    TrencadX::WriteString "mdl_end"
     
 }
 
@@ -540,12 +540,12 @@ proc TrencadX::WriteBCs { filename } {
     
     set document [$::gid_groups_conds::doc documentElement]
 
-    TrencadX::WriteString "for_models"
+    TrencadX::WriteString "begin_models_list"
     TrencadX::WriteString "begin_model"
 
     set address "dirichlet"
     
-    TrencadX::WriteString "dirichlet"
+    TrencadX::WriteString "begin_dirichlet"
 
     TrencadX::PrintCondition $document $address
     
@@ -579,7 +579,7 @@ proc TrencadX::WriteBCs { filename } {
     TrencadX::WriteString "end_on_body"
     
     TrencadX::WriteString "end_model"
-    TrencadX::WriteString "end_models"
+    TrencadX::WriteString "end_models_list"
 
 }
 
