@@ -433,7 +433,6 @@ proc TrencadX::WriteData { filename } {
     set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     
 	GiD_WriteCalculationFile puts "type $kind"
-	GiD_WriteCalculationFile puts "model $model"
 	GiD_WriteCalculationFile puts ""
 
 	GiD_WriteCalculationFile puts "begin_problem_definition"
