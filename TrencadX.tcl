@@ -8,15 +8,15 @@ proc InitGIDProject { dir } {
     gid_groups_conds::open_conditions menu
     
     if { [info procs ReadProblemtypeXml] != "" } {
-	#this procedure exists after GiD 11.1.2b
-	set data [ReadProblemtypeXml [file join $dir TrencadX.xml] Infoproblemtype {Version MinimumGiDVersion}]                
+        #this procedure exists after GiD 11.1.2b
+        set data [ReadProblemtypeXml [file join $dir TrencadX.xml] Infoproblemtype {Version MinimumGiDVersion}]                
     } else {
-	#TrencadX::ReadProblemtypeXml is a copy of ReadProblemtypeXml to be able to work with previous GiD's
-	set data [TrencadX::ReadProblemtypeXml [file join $dir TrencadX.xml] Infoproblemtype {Version MinimumGiDVersion}]
+        #TrencadX::ReadProblemtypeXml is a copy of ReadProblemtypeXml to be able to work with previous GiD's
+        set data [TrencadX::ReadProblemtypeXml [file join $dir TrencadX.xml] Infoproblemtype {Version MinimumGiDVersion}]
     }
     if { $data == "" } {
-	WarnWinText [= "Configuration file %s not found" [file join $dir TrencadX.xml]]
-	return 1
+        WarnWinText [= "Configuration file %s not found" [file join $dir TrencadX.xml]]
+        return 1
     }
     array set problemtype_local $data
     set TrencadX::VersionNumber $problemtype_local(Version)
@@ -30,13 +30,13 @@ proc ChangedLanguage { language } {
 
 proc AfterWriteCalcFileGIDProject { filename errorflag } {   
     if { ![info exists gid_groups_conds::doc] } {
-	WarnWin [= "Error: data not OK"]
-	return
+        WarnWin [= "Error: data not OK"]
+        return
     }    
     set err [catch { TrencadX::WriteCalculationFile $filename } ret]
     if { $err } {       
-	WarnWin [= "Error when preparing data for analysis (%s)" $::errorInfo]
-	set ret -cancel-
+        WarnWin [= "Error when preparing data for analysis (%s)" $::errorInfo]
+        set ret -cancel-
     }
     return $ret
 }
@@ -53,33 +53,33 @@ namespace eval TrencadX {
     set edges(HexahedraQuadratic) {{8}   {9}   {10}  {11}  {16}  {17}  {18}  {19}  {12}  {13}  {14}  {15}}
     set edges(Prism)              {{0 1} {1 2} {2 0} {3 4} {4 5} {5 3} {0 3} {1 4} {2 5}}
     set edges(Pyramid)            {{0 1} {1 2} {2 3} {3 0} {0 4} {1 4} {2 4} {3 4}}
-		            
+                            
     set dofs2D_lista [dict create truss       {0 1         } \
-		                          beam        {0 1   3     } \
-		                          planestress {0 1         } \
-		                          planestrain {0 1         } \
-		                          shell       {0 1 2 3 4   } \
-		                          solid       {0 1 2       } ]
-		            
+                                          beam        {0 1   3     } \
+                                          planestress {0 1         } \
+                                          planestrain {0 1         } \
+                                          shell       {0 1 2 3 4   } \
+                                          solid       {0 1 2       } ]
+                            
     set dofs3D_lista [dict create truss       {0 1   3     } \
-		                          beam        {0 1 2 3 4 5 } \
-		                          planestress {0 1         } \
-		                          planestrain {0 1         } \
-		                          shell       {0 1 2 3 4 5 } \
-		                          solid       {0 1 2       } ]
+                                          beam        {0 1 2 3 4 5 } \
+                                          planestress {0 1         } \
+                                          planestrain {0 1         } \
+                                          shell       {0 1 2 3 4 5 } \
+                                          solid       {0 1 2       } ]
     
     set NumElemNode [dict create Pyramid       {5 13 13} \
-		                         Prism         {6 15 18} \
-		                         Hexahedra     {8 20 27} \
-		                         Tetrahedra    {4 10 10} \
-		                         Quadrilateral {4  8  9} \
-		                         Triangle      {3  6  6} \
-		                         Line          {2  3  3} ]
+                                         Prism         {6 15 18} \
+                                         Hexahedra     {8 20 27} \
+                                         Tetrahedra    {4 10 10} \
+                                         Quadrilateral {4  8  9} \
+                                         Triangle      {3  6  6} \
+                                         Line          {2  3  3} ]
     
     set allProps [list e11 e22 e33 g12 g13 g23 n12 n13 n23 c11 c12 c13 c14 c15 c16 c22 c23 c24 c25 c26 c33 c34 c35 c36 c44 c45 c46 c55 c56 c66]
     set ctsProps [dict create isotrop   {e11 n12} \
-		              orthotrop {e11 e22 e33 g12 g13 g23 n12 n13 n23} \
-		              anisotrop {c11 c12 c13 c14 c15 c16 c22 c23 c24 c25 c26 c33 c34 c35 c36 c44 c45 c46 c55 c56 c66} ]
+                              orthotrop {e11 e22 e33 g12 g13 g23 n12 n13 n23} \
+                              anisotrop {c11 c12 c13 c14 c15 c16 c22 c23 c24 c25 c26 c33 c34 c35 c36 c44 c45 c46 c55 c56 c66} ]
 }
 
 #################################################
@@ -110,10 +110,10 @@ proc TrencadX::About { } {
 
 proc TrencadX::ModifyMenus { } {   
     if { [GidUtils::IsTkDisabled] } {  
-	return
+        return
     }          
     foreach menu_name {Conditions Interval "Interval Data" "Local axes"} {
-	GidChangeDataLabel $menu_name ""
+        GidChangeDataLabel $menu_name ""
     }       
     GidAddUserDataOptions --- 1    
     GidAddUserDataOptions [= "TrencadX menu"] [list gid_groups_conds::open_conditions menu] 2
@@ -127,7 +127,7 @@ proc TrencadX::ModifyMenus { } {
 # example procedures asking GiD_Info and doing things with GiD_Process
 proc TrencadX::CreateWindow { } {  
     if { [GidUtils::AreWindowsDisabled] } {
-	return
+        return
     }
     set w .gid.win_example
     InitWindow $w [= "PROBLEM TYPE TrencadX"] ExampleCMAS "" "" 1
@@ -174,13 +174,13 @@ proc TrencadX::GetBlocksList { domNode args containerName } {
     set x_path {//container[@n=$containerName]}
     set dom_materials [$domNode selectNodes $x_path]
     if { $dom_materials == "" } {
-	error [= "xpath '%s' not found in the spd file" $x_path]
+        error [= "xpath '%s' not found in the spd file" $x_path]
     }
     set image $containerName
     set result [list]
     foreach dom_material [$dom_materials selectNodes blockdata] {
-	set name [$dom_material @name] 
-	lappend result [list 0 $name $name $image 1]
+        set name [$dom_material @name] 
+        lappend result [list 0 $name $name $image 1]
     }
     return [join $result ,]
 }
@@ -188,31 +188,31 @@ proc TrencadX::GetBlocksList { domNode args containerName } {
 proc TrencadX::GetModelType { domNode args model } {
     set dimen [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='dimension']} ]
     if { $dimen == "2D" } {
-	return truss,beam,shell,planestress,planestrain
+        return truss,beam,shell,planestress,planestrain
     } elseif { $dimen == "3D" } {
-	return shell,solid
+        return shell,solid
     }
 }
 
 proc TrencadX::GetBounElem { domNode args } {
     set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     if { $model eq "truss" || $model eq "beam"} {
-	return 
+        return 
     } elseif { $model == "planestress" || $model == "planestrain" || $model == "shell" } {
-	return line
+        return line
     } elseif { $model == "solid" } {
-	return surface
+        return surface
     } 
 }
 
 proc TrencadX::GetBodyElem { domNode args } {
     set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     if { $model eq "truss" || $model eq "beam"} {
-	return line
+        return line
     } elseif { $model == "planestress" || $model == "planestrain" || $model == "shell" } {
-	return surface
+        return surface
     } elseif { $model == "solid" } {
-	return volume
+        return volume
     } 
 }
 
@@ -222,8 +222,8 @@ proc TrencadX::HideConditionModel { domNode args } {
     
     # width
     if { $prope eq "width" } {
-	if { $model eq "truss" || $model eq "beam" } { return normal }
-	return hidden
+        if { $model eq "truss" || $model eq "beam" } { return normal }
+        return hidden
     }
     # thickness
     if { $model ne "solid" } { return normal }
@@ -238,11 +238,11 @@ proc TrencadX::CheckDOFs { domNode args } {
     elseif { $dimen eq "3D" } { set dimen 1 }
     
     set dofs [dict create truss       {2 3} \
-		          beam        {3 6} \
-		          planestress {2 2} \
-		          planestrain {2 2} \
-		          shell       {5 6} \
-		          solid       {3 3} ]
+                          beam        {3 6} \
+                          planestress {2 2} \
+                          planestrain {2 2} \
+                          shell       {5 6} \
+                          solid       {3 3} ]
     
     set nums [lindex [dict get $dofs $model] $dimen]
     
@@ -250,8 +250,8 @@ proc TrencadX::CheckDOFs { domNode args } {
     set count [llength [regexp -all -inline {\S+} $value]]
     
     if { $nums ne $count} {
-	WarnWin [= "Incorrent number of DOFs should be $nums"]
-	return -cancel-
+        WarnWin [= "Incorrent number of DOFs should be $nums"]
+        return -cancel-
     }
 }
 
@@ -268,11 +268,11 @@ proc TrencadX::FilterDOFs { domNode args } {
     #}
     set last [string index $dof end]
     set lastNum [expr {$last + 0}]
-	
+        
     if { $dimen eq "2D" } { 
-	set diccDOFs $dofs2D_lista 
+        set diccDOFs $dofs2D_lista 
     } elseif { $dimen eq "3D" } { 
-	set diccDOFs $dofs3D_lista 
+        set diccDOFs $dofs3D_lista 
     }
 
     set dofs_model [dict get $diccDOFs $model]
@@ -290,8 +290,8 @@ proc TrencadX::WriteNodeValue { xpath } {
     set document [$::gid_groups_conds::doc documentElement]
     set xml_node [$document selectNodes $xpath]
     if {  [llength $xml_node] == 1 } {
-	set value [get_domnode_attribute $xml_node v]
-	TrencadX::WriteString $value
+        set value [get_domnode_attribute $xml_node v]
+        TrencadX::WriteString $value
     }
 }
 
@@ -299,7 +299,7 @@ proc TrencadX::GetNodeValue { xpath } {
     set document [$::gid_groups_conds::doc documentElement]
     set xml_node [$document selectNodes $xpath]
     if {  [llength $xml_node] == 1 } {
-	set value [get_domnode_attribute $xml_node v]
+        set value [get_domnode_attribute $xml_node v]
     }
     return $value
 }
@@ -309,17 +309,17 @@ proc TrencadX::WriteDatabaseSimple { xpath } {
     set blocks [$document selectNodes $xpath]
     if {$blocks eq ""} {error [= "No blocks found"]}
     foreach block $blocks {
-	set block_name [$block @name]
-	regsub -all { } $block_name "" block_name
-	GiD_WriteCalculationFile puts $block_name
-	set dict_nodes [dict create]
-	foreach node [$block selectNodes value] {
-	    set value [get_domnode_attribute $node v]
-	    regsub -all { } $value "" value
-	    dict set dict_nodes [$node @n] $value
-	}
-	dict set dict_blocks $block_name $dict_nodes
-	GiD_WriteCalculationFile puts $dict_nodes
+        set block_name [$block @name]
+        regsub -all { } $block_name "" block_name
+        GiD_WriteCalculationFile puts $block_name
+        set dict_nodes [dict create]
+        foreach node [$block selectNodes value] {
+            set value [get_domnode_attribute $node v]
+            regsub -all { } $value "" value
+            dict set dict_nodes [$node @n] $value
+        }
+        dict set dict_blocks $block_name $dict_nodes
+        GiD_WriteCalculationFile puts $dict_nodes
     }
 }
 
@@ -350,10 +350,10 @@ proc TrencadX::CopyName { xpath } {
     set document [$::gid_groups_conds::doc documentElement]
     set xml_node [$document selectNodes $xpath]
     foreach blockmaterial $xml_node {
-	set value [get_domnode_attribute $blockmaterial name]
-	foreach nameNode [$blockmaterial selectNodes value] {
-	    $nameNode setAttribute v $value
-	}
+        set value [get_domnode_attribute $blockmaterial name]
+        foreach nameNode [$blockmaterial selectNodes value] {
+            $nameNode setAttribute v $value
+        }
     }
 }
 
@@ -375,7 +375,7 @@ proc TrencadX::InitWriteFile {filename} {
     
     set counter 0
     while {[string index $filename [expr $len - $counter]]!="/"} {
-	incr counter 1
+        incr counter 1
     }
     
     set directoryName [ string range $filename 0 [expr $len - $counter ] ]
@@ -396,19 +396,24 @@ proc TrencadX::InitWriteFile {filename} {
     TrencadX::WriteMaterials $filenameMat
     GiD_WriteCalculationFile end
     
+    set filenameMdl "${directoryName}data/${problemName}.mdl"
+    GiD_WriteCalculationFile init $filenameMdl
+    TrencadX::WriteModels $filenameMdl
+    GiD_WriteCalculationFile end
+    
     set filenameMatSets "${directoryName}data/${problemName}.set"
     GiD_WriteCalculationFile init $filenameMatSets
     TrencadX::WriteSets $filenameMatSets "materials"
     GiD_WriteCalculationFile end
     
-    set filenameBC "${directoryName}data/${problemName}.fix"
+    set filenameBC "${directoryName}data/${problemName}.bcs"
     GiD_WriteCalculationFile init $filenameBC
     TrencadX::WriteBCs $filenameBC
     GiD_WriteCalculationFile end
     
     set filenameMesh "${directoryName}data/${problemName}.msh"
     GiD_Process Mescape Files WriteMesh $filenameMesh
-	
+        
 }
 
 proc TrencadX::EndWriteFile { } {
@@ -430,44 +435,43 @@ proc TrencadX::WriteData { filename } {
 
     #TrencadX::WriteNodeValue {/TrencadX_customlib_data/value[@n='kind']}
     set kind [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='kind']} ]
-    set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     
-	GiD_WriteCalculationFile puts "type $kind"
-	GiD_WriteCalculationFile puts ""
+        GiD_WriteCalculationFile puts "type $kind"
+        GiD_WriteCalculationFile puts ""
 
-	GiD_WriteCalculationFile puts "begin_problem_definition"
+        GiD_WriteCalculationFile puts "begin_problem_definition"
 
     if { $kind eq "analysis" } {
-	set xpath {/TrencadX_customlib_data/container[@n='stagesAnly']/blockdata[@n='stage']}
+        set xpath {/TrencadX_customlib_data/container[@n='stagesAnly']/blockdata[@n='stage']}
 
-	set stages [$document selectNodes $xpath]
-	if {$stages eq ""} {error [= "No stages found"]}
+        set stages [$document selectNodes $xpath]
+        if {$stages eq ""} {error [= "No stages found"]}
 
-	foreach stage $stages {
-	    
-		GiD_WriteCalculationFile puts "  begin_stage"
+        foreach stage $stages {
+            
+                GiD_WriteCalculationFile puts "  begin_stage"
 
-	    foreach substage [$stage selectNodes blockdata] {
-		
-		    GiD_WriteCalculationFile puts "    begin_substage"
+            foreach substage [$stage selectNodes blockdata] {
+                
+                    GiD_WriteCalculationFile puts "    begin_substage"
 
-		    GiD_WriteCalculationFile puts "      load_increment: [[$substage selectNodes {./value[@n="loadIncrement"]}] @v]"
-		    GiD_WriteCalculationFile puts "      steps: [[$substage selectNodes {./value[@n="steps"]}] @v]"
-		    GiD_WriteCalculationFile puts "      tolerance: [[$substage selectNodes {./value[@n="tolerance"]}] @v]"
+                    GiD_WriteCalculationFile puts "      load_increment: [[$substage selectNodes {./value[@n="loadIncrement"]}] @v]"
+                    GiD_WriteCalculationFile puts "      steps: [[$substage selectNodes {./value[@n="steps"]}] @v]"
+                    GiD_WriteCalculationFile puts "      tolerance: [[$substage selectNodes {./value[@n="tolerance"]}] @v]"
 
-		    GiD_WriteCalculationFile puts "    end_substage"
+                    GiD_WriteCalculationFile puts "    end_substage"
 
-	    }
-	    
-		GiD_WriteCalculationFile puts "  end_stage"
+            }
+            
+                GiD_WriteCalculationFile puts "  end_stage"
 
-	}
-	
+        }
+        
     } elseif { $kind eq "homogenization" } {
-	set xpath {/TrencadX_customlib_data/container[@n='stagesHomo']}
+        set xpath {/TrencadX_customlib_data/container[@n='stagesHomo']}
     }
 
-	GiD_WriteCalculationFile puts "end_problem_definition"
+        GiD_WriteCalculationFile puts "end_problem_definition"
     
 }
 
@@ -492,11 +496,11 @@ proc TrencadX::WriteSets { filename blockName } {
     #    dict set condition_formats $n "%d $modelFlag $ID \n"
     #    GiD_WriteCalculationFile elements $condition_formats
     #    incr ID 1
-	set condition_formats ""
-	set n [$gNode @n]
-	dict set condition_formats $n "%d $ID \n"
-	GiD_WriteCalculationFile elements -unique -sorted $condition_formats
-	incr ID 1
+        set condition_formats ""
+        set n [$gNode @n]
+        dict set condition_formats $n "%d $ID \n"
+        GiD_WriteCalculationFile elements -unique -sorted $condition_formats
+        incr ID 1
     }
     
     TrencadX::WriteString "mat_end"
@@ -507,7 +511,7 @@ proc TrencadX::WriteSets { filename blockName } {
     set all_elements [GiD_Info Mesh MaxNumElements]
     set limit [expr {$all_elements + 1}]
     foreach i [range 1 $limit] {
-	GiD_WriteCalculationFile puts "$i 1"
+        GiD_WriteCalculationFile puts "$i 1"
     }
     
     TrencadX::WriteString "mdl_end"
@@ -593,75 +597,82 @@ proc TrencadX::WriteMaterials { filename } {
 
     set xpath {/TrencadX_customlib_data/container[@n='materials']/blockdata[@n='material']}
 
-	GiD_WriteCalculationFile puts "begin_materials_list"
+        GiD_WriteCalculationFile puts "begin_materials_list"
 
     set blocks [$document selectNodes $xpath]
     if {$blocks eq ""} {error [= "No blocks found"]}
     
     foreach block $blocks {
-	    set block_name [$block @name]
+            set block_name [$block @name]
 
-	    GiD_WriteCalculationFile puts "  begin_material"
-	
-	    #set material [$block selectNodes {./value[@n="type"]}]
-	    #set flg_type [get_domnode_attribute [$block selectNodes {./value[@n="type"]}] v]
-	    
-	    #set material [$block selectNodes {./value[@n="type"]}]
-	    set flg_type [[$block selectNodes {./value[@n="type"]}] @v]
-	    
-	    GiD_WriteCalculationFile puts "    type: $flg_type" 
-	    
-	    set flg_cttype [[$block selectNodes {./value[@n="cttype"]}] @v]
+            GiD_WriteCalculationFile puts "  begin_material"
+        
+            #set material [$block selectNodes {./value[@n="type"]}]
+            #set flg_type [get_domnode_attribute [$block selectNodes {./value[@n="type"]}] v]
+            
+            #set material [$block selectNodes {./value[@n="type"]}]
+            set flg_type [[$block selectNodes {./value[@n="type"]}] @v]
+            
+            GiD_WriteCalculationFile puts "    type: $flg_type" 
+            
+            set flg_cttype [[$block selectNodes {./value[@n="cttype"]}] @v]
     
-	    set current_props [dict get $ctsProps $flg_cttype]
-	    
-	    GiD_WriteCalculationFile puts "    ct: $flg_cttype"
-	
-	foreach prop $current_props {
-	    GiD_WriteCalculationFile puts "      $prop--: [[$block selectNodes {./value[@n=$prop]}] @v]"
-	}
-	    GiD_WriteCalculationFile puts "    end_ct"
-	    
-	    GiD_WriteCalculationFile puts "  end_material"
+            set current_props [dict get $ctsProps $flg_cttype]
+            
+            GiD_WriteCalculationFile puts "    ct: $flg_cttype"
+        
+        foreach prop $current_props {
+            GiD_WriteCalculationFile puts "      $prop--: [[$block selectNodes {./value[@n=$prop]}] @v]"
+        }
+            GiD_WriteCalculationFile puts "    end_ct"
+            
+            GiD_WriteCalculationFile puts "  end_material"
 
     }
 
-	GiD_WriteCalculationFile puts "end_materials_list"
+        GiD_WriteCalculationFile puts "end_materials_list"
     
 }
 
 proc TrencadX::WriteModels { filename } {
     
-    set document [$::gid_groups_conds::doc documentElement]
+    #set document [$::gid_groups_conds::doc documentElement]
 
-    set xpath {/TrencadX_customlib_data/container[@n='models']/blockdata[@n='model']}
+    #set xpath {/TrencadX_customlib_data/container[@n='models']/blockdata[@n='model']}
 
-	GiD_WriteCalculationFile puts "begin_models_list"
+    #    GiD_WriteCalculationFile puts "begin_models_list"
 
-    set blocks [$document selectNodes $xpath]
-    if {$blocks eq ""} {error [= "No blocks found"]}
+    #set blocks [$document selectNodes $xpath]
+    #if {$blocks eq ""} {error [= "No blocks found"]}
     
-    foreach block $blocks {
-	    set block_name [$block @name]
+    #foreach block $blocks {
+    #        set block_name [$block @name]
 
-	    GiD_WriteCalculationFile puts "  begin_model"
-	
-	    set flg_type [[$block selectNodes {./value[@n="modelType"]}] @v]
-	    
-	    GiD_WriteCalculationFile puts "    type: $flg_type"
-	
-	    if { $flg_type eq "planestress" } {
-		GiD_WriteCalculationFile puts "    thickness: [[$block selectNodes {./value[@n="thickness"]}] @v]"
-	} elseif { $flg_type eq "truss" } {
-	    GiD_WriteCalculationFile puts "    thickness: [[$block selectNodes {./value[@n="thickness"]}] @v]"
-	    GiD_WriteCalculationFile puts "    width: [[$block selectNodes {./value[@n="width"]}] @v]"
-	} 
-	    
-	    GiD_WriteCalculationFile puts "  end_model"
+    #        GiD_WriteCalculationFile puts "  begin_model"
+        
+    #        set flg_type [[$block selectNodes {./value[@n="modelType"]}] @v]
+    #        
+    #        GiD_WriteCalculationFile puts "    type: $flg_type"
+        
+    #        if { $flg_type eq "planestress" } {
+    #            GiD_WriteCalculationFile puts "    thickness: [[$block selectNodes {./value[@n="thickness"]}] @v]"
+    #    } elseif { $flg_type eq "truss" } {
+    #        GiD_WriteCalculationFile puts "    thickness: [[$block selectNodes {./value[@n="thickness"]}] @v]"
+    #        GiD_WriteCalculationFile puts "    width: [[$block selectNodes {./value[@n="width"]}] @v]"
+    #    } 
+    #        
+    #        GiD_WriteCalculationFile puts "  end_model"
 
-    }
+    #}
 
-	GiD_WriteCalculationFile puts "end_models_list"
+    #    GiD_WriteCalculationFile puts "end_models_list"
+    
+    set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
+    GiD_WriteCalculationFile puts "begin_models_list"
+    GiD_WriteCalculationFile puts "  begin_model"
+    GiD_WriteCalculationFile puts "    type $model"
+    GiD_WriteCalculationFile puts "  end_model"
+    GiD_WriteCalculationFile puts "end_models_list"
     
 }
 
@@ -670,24 +681,24 @@ proc TrencadX::GetListDOFValues { gNode flg } {
     variable dofs3D_lista
     set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     set dimen [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='dimension']} ]
-	
+        
     if { $dimen eq "2D" } { 
-	set diccDOFs $dofs2D_lista 
+        set diccDOFs $dofs2D_lista 
     } elseif { $dimen eq "3D" } { 
-	set diccDOFs $dofs3D_lista 
+        set diccDOFs $dofs3D_lista 
     }
 
     set dofs_model [dict get $diccDOFs $model]
-	
+        
     set vals [list]
     set dofs [list 0 1 2 3 4 5]
     foreach dof $dofs {
-	    if { [lsearch -exact $dofs_model $dof] >= 0 } {
-	    set word "${flg}${dof}"
-	    set dof_node [$gNode selectNodes {./value[@n=$word]}]
-		    set dof_value [$dof_node @v]
-		lappend vals $dof_value
-	    }
+            if { [lsearch -exact $dofs_model $dof] >= 0 } {
+            set word "${flg}${dof}"
+            set dof_node [$gNode selectNodes {./value[@n=$word]}]
+                    set dof_value [$dof_node @v]
+                lappend vals $dof_value
+            }
     }
     return $vals
 }
@@ -695,13 +706,13 @@ proc TrencadX::GetListDOFValues { gNode flg } {
 proc TrencadX::PrintCondition { document address } {
 
     foreach gNode [$document selectNodes {//condition[@n=$address]/group}] {
-	set condition_formats ""
-	set n [$gNode @n]
-	set flgs [TrencadX::GetListDOFValues $gNode "flg"]
-	set vals [TrencadX::GetListDOFValues $gNode "dof"]
-	    
-	dict set condition_formats $n "%d $flgs $vals \n"
-	GiD_WriteCalculationFile nodes -sorted -unique $condition_formats
+        set condition_formats ""
+        set n [$gNode @n]
+        set flgs [TrencadX::GetListDOFValues $gNode "flg"]
+        set vals [TrencadX::GetListDOFValues $gNode "dof"]
+            
+        dict set condition_formats $n "%d $flgs $vals \n"
+        GiD_WriteCalculationFile nodes -sorted -unique $condition_formats
     }
 
 }
@@ -709,12 +720,12 @@ proc TrencadX::PrintCondition { document address } {
 proc TrencadX::PrintConditionElements { document address } {
 
     foreach gNode [$document selectNodes {//condition[@n=$address]/group}] {
-	set condition_formats ""
-	set n [$gNode @n]
-	set vals [TrencadX::GetListDOFValues $gNode]
-	    
-	dict set condition_formats $n "%d $vals \n"
-	GiD_WriteCalculationFile elements $condition_formats
+        set condition_formats ""
+        set n [$gNode @n]
+        set vals [TrencadX::GetListDOFValues $gNode]
+            
+        dict set condition_formats $n "%d $vals \n"
+        GiD_WriteCalculationFile elements $condition_formats
     }
 
 }
@@ -725,21 +736,21 @@ proc TrencadX::PrintConditionFaces { document address } {
     set quadIndex [GiD_Info Project Quadratic]
 
     foreach gNode [$document selectNodes {//condition[@n=$address]/group}] {
-	set condition_formats ""
-	
-	set n [$gNode @n]
-	set vals [TrencadX::GetListDOFValues $gNode]
+        set condition_formats ""
+        
+        set n [$gNode @n]
+        set vals [TrencadX::GetListDOFValues $gNode]
 
-	# Linear|Triangle|Quadrilateral|Tetrahedra|Hexahedra|Prism|Point|Pyramid|Sphere|Circle
+        # Linear|Triangle|Quadrilateral|Tetrahedra|Hexahedra|Prism|Point|Pyramid|Sphere|Circle
     
-	dict set condition_formats $n "%d %d %d %d %d\n"
-	GiD_WriteCalculationFile elements -elemtype Quadrilateral -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
+        dict set condition_formats $n "%d %d %d %d %d\n"
+        GiD_WriteCalculationFile elements -elemtype Quadrilateral -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
     
-	dict set condition_formats $n "%d %d %d %d\n"
-	GiD_WriteCalculationFile elements -elemtype Triangle -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
+        dict set condition_formats $n "%d %d %d %d\n"
+        GiD_WriteCalculationFile elements -elemtype Triangle -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
     
-	dict set condition_formats $n "%d %d %d\n"
-	GiD_WriteCalculationFile elements -elemtype Line -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
+        dict set condition_formats $n "%d %d %d\n"
+        GiD_WriteCalculationFile elements -elemtype Line -elements_faces faces -unique -sorted -print_faces_conecs $condition_formats
     
     }
 
@@ -751,17 +762,17 @@ proc GiD_Event_AfterRunCalculation { basename dir problemtypedir where error err
     
     if {$dimen eq "2D"} {
     
-	set filenameMesh "${dir}/data/${basename}.msh"
+        set filenameMesh "${dir}/data/${basename}.msh"
     
-	set data [GidUtils::ReadFile $filenameMesh]
+        set data [GidUtils::ReadFile $filenameMesh]
 
-	GiD_WriteCalculationFile init $filenameMesh
+        GiD_WriteCalculationFile init $filenameMesh
 
-	set data [string map {{dimension 3} {dimension 2}} $data]
+        set data [string map {{dimension 3} {dimension 2}} $data]
 
-	GiD_WriteCalculationFile puts $data
+        GiD_WriteCalculationFile puts $data
 
-	GiD_WriteCalculationFile end
+        GiD_WriteCalculationFile end
     
     }
 
@@ -771,53 +782,53 @@ proc TrencadX::PrintConditionEdges { kind } {
     set meshType [GiD_Info Project Quadratic]
     set document [$::gid_groups_conds::doc documentElement]
     variable edges
-	foreach gNode [$document selectNodes {//container[@n="loadsMEC3D"]/condition[@n="Lines_NF"]/group}] {
-	    set condition_formats ""
-	    set n [$gNode @n]
-	    set value_node [$gNode selectNodes {./value[@n="valueX"]}]
-	    set valueX [$value_node @v]
-	    regsub -all { } $valueX "" valueX
-	    set value_node [$gNode selectNodes {./value[@n="valueY"]}]
-	    set valueY [$value_node @v]
-	    regsub -all { } $valueY "" valueY
-	    set value_node [$gNode selectNodes {./value[@n="valueZ"]}]
-	    set valueZ [$value_node @v]
-	    regsub -all { } $valueZ "" valueZ
-	    dict set condition_formats $n "%d \n"
-	    PLCd::WriteString "####################FLAGnewLines_NF########################"
-	    PLCd::WriteString "$valueX $valueY $valueZ"
-	    set group_nodes_sorted [lsort -integer [GiD_EntitiesGroups get $n nodes]]
-	    foreach element_type {Tetrahedra Hexahedra Prism Pyramid} {
-		    set element_num_edges [PLCd::GetElementNumEdges $element_type]
-		    foreach item [GiD_Info Mesh Elements $element_type -sublist] {
-		        set element_id [lindex $item 0]
-		        set element_nodes [lrange $item 1 end-1]
-		        for {set i_edge 0} {$i_edge<$element_num_edges} {incr i_edge} {
-		            set edge_nodes [PLCd::GetEdgeNodes $element_type $element_nodes $i_edge]
-		            set edge_match true
-		            foreach edge_node_id $edge_nodes {
-		                if { [lsearch -sorted -integer $group_nodes_sorted $edge_node_id] == -1 } {
-		                    set edge_match false
-		                    break
-		                }
-		            }
-		            if { $edge_match } {
-		                if { $meshType == 0 } {
-		                    PLCd::WriteString "$element_id $edge_nodes"
-		                } else {
-		                    PLCd::WriteString "$element_id $edge_nodes [lindex $element_nodes [lindex $edges(HexahedraQuadratic) $i_edge]]"
-		                }
-		            }
-		        }
-		    }
-	    }
-	}
+        foreach gNode [$document selectNodes {//container[@n="loadsMEC3D"]/condition[@n="Lines_NF"]/group}] {
+            set condition_formats ""
+            set n [$gNode @n]
+            set value_node [$gNode selectNodes {./value[@n="valueX"]}]
+            set valueX [$value_node @v]
+            regsub -all { } $valueX "" valueX
+            set value_node [$gNode selectNodes {./value[@n="valueY"]}]
+            set valueY [$value_node @v]
+            regsub -all { } $valueY "" valueY
+            set value_node [$gNode selectNodes {./value[@n="valueZ"]}]
+            set valueZ [$value_node @v]
+            regsub -all { } $valueZ "" valueZ
+            dict set condition_formats $n "%d \n"
+            PLCd::WriteString "####################FLAGnewLines_NF########################"
+            PLCd::WriteString "$valueX $valueY $valueZ"
+            set group_nodes_sorted [lsort -integer [GiD_EntitiesGroups get $n nodes]]
+            foreach element_type {Tetrahedra Hexahedra Prism Pyramid} {
+                    set element_num_edges [PLCd::GetElementNumEdges $element_type]
+                    foreach item [GiD_Info Mesh Elements $element_type -sublist] {
+                        set element_id [lindex $item 0]
+                        set element_nodes [lrange $item 1 end-1]
+                        for {set i_edge 0} {$i_edge<$element_num_edges} {incr i_edge} {
+                            set edge_nodes [PLCd::GetEdgeNodes $element_type $element_nodes $i_edge]
+                            set edge_match true
+                            foreach edge_node_id $edge_nodes {
+                                if { [lsearch -sorted -integer $group_nodes_sorted $edge_node_id] == -1 } {
+                                    set edge_match false
+                                    break
+                                }
+                            }
+                            if { $edge_match } {
+                                if { $meshType == 0 } {
+                                    PLCd::WriteString "$element_id $edge_nodes"
+                                } else {
+                                    PLCd::WriteString "$element_id $edge_nodes [lindex $element_nodes [lindex $edges(HexahedraQuadratic) $i_edge]]"
+                                }
+                            }
+                        }
+                    }
+            }
+        }
 }
 
 proc TrencadX::NormalSolidOnly { document address } {
     set model [ TrencadX::GetNodeValue {/TrencadX_customlib_data/value[@n='model']} ]
     if {$model eq "solid"} {
-	return normal
+        return normal
     }
     return hidden
 }
